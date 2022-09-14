@@ -163,10 +163,13 @@ ExecStart=/var/www/bild/target/release/bild-server
 WantedBy=multi-user.target
 " > /etc/systemd/system/bild-server.service
 
-new_task "Starting up bild-server.service"
+info "Running systemctl daemon-reload"
+systemctl daemon-reload
+
+info "Starting up bild-server.service"
 systemctl start bild-server && systemctl enable bild-server
 
-info "Generating auth token"
+new_task "Generating auth token"
 AUTH_TOKEN=$(/var/www/bild/target/release/bild-auth -t)
 
 green_bold "Thats it! Below is some final information:"
