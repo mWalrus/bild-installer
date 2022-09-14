@@ -62,7 +62,7 @@ function confirm() {
 green_bold "Welcome to the bild installer!"
 
 # Retrieve the distro name
-DISTRO=$(cat /etc/*-release | grep DISTRIB_ID | awk -F"=" '{print $2}') | sed 's/"//'
+DISTRO=$(cat /etc/*-release | grep DISTRIB_ID | awk -F"=" '{print $2}' | sed 's/"//')
 
 # If distro is not ubuntu, warn the user of risk
 if [ "$DISTRO" != "Ubuntu" ]; then
