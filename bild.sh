@@ -74,7 +74,6 @@ if [ "$DISTRO" != "Ubuntu" ]; then
   fi
 fi
 
-DOMAIN_NAME=$(read_string "Enter your domain name (ex: your-domain.com)")
 
 new_task "Installing required packages:"
 list "nginx" "certbot" "python3-certbot-nginx" "gcc"
@@ -89,19 +88,21 @@ new_task "Installing rustup"
 info "Installing rustup nightly toolchain"
 # rustup install nightly
 
+DOMAIN_NAME="i.$(read_string "Enter your domain name (ex: your-domain.com)")"
+
 new_task "Creating nginx config file"
 NGINX_CONF_FILE="/etc/nginx/sites-available/$DOMAIN_NAME.conf"
 if [ -f "$NGINX_CONF_FILE" ]; then
   info "Looks like $NGINX_CONF_FILE already exists"
   if [ grep -q "server_name $DOMAIN_NAME www.$DOMAIN_NAME" ]; then
     info "Updating conf file with required fields"
-    # sed "/server_name $DOMAIN_NAME www.$DOMAIN_NAME/a \tlocation /i/ {\n\t\tproxy_pass http://127.0.0.1:1337;\n\t}" $NGINX_CONF_FILE
+    # sed "/server_name $DOMAIN_NAME www.$DOMAIN_NAME/a \tlocation / {\n\t\tproxy_pass http://127.0.0.1:1337;\n\t}" $NGINX_CONF_FILE
   fi
 else
   # touch "$NGINX_CONF_FILE"
   # echo "server {" >> $NGINX_CONF_FILE
   # echo "  server_name $DOMAIN_NAME www.$DOMAIN_NAME" >> $NGINX_CONF_FILE
-  # echo "  location /i/ {" >> $NGINX_CONF_FILE
+  # echo "  location / {" >> $NGINX_CONF_FILE
   # echo "    proxy_pass http://127.0.0.1:1337;" >> $NGINX_CONF_FILE
   # echo "  }" >> $NGINX_CONF_FILE
   # echo "}" >> $NGINX_CONF_FILE
