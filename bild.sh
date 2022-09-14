@@ -123,8 +123,8 @@ systemctl reload nginx
 new_task "Start certificate generation with certbot"
 if $(confirm "Do you want to generate certificates with certbot?" true); then
   info "Generating certs"
-  certbot --nginx
-
+  certbot --nginx -d $DOMAIN_NAME -d "www.$DOMAIN_NAME"
+  
   info "Reloading nginx"
   systemctl reload nginx
 else
