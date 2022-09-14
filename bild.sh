@@ -102,13 +102,13 @@ if [ -f "$NGINX_CONF_FILE" ]; then
     sed "/server_name $DOMAIN_NAME www.$DOMAIN_NAME/a \tlocation / {\n\t\tproxy_pass http://127.0.0.1:1337;\n\t}" $NGINX_CONF_FILE
   fi
 else
-  touch "$NGINX_CONF_FILE"
-  echo "server {" >> $NGINX_CONF_FILE
-  echo "  server_name $DOMAIN_NAME www.$DOMAIN_NAME;" >> $NGINX_CONF_FILE
-  echo "  location / {" >> $NGINX_CONF_FILE
-  echo "    proxy_pass http://127.0.0.1:1337;" >> $NGINX_CONF_FILE
-  echo "  }" >> $NGINX_CONF_FILE
-  echo "}" >> $NGINX_CONF_FILE
+  echo "
+server {
+  server_name $DOMAIN_NAME www.$DOMAIN_NAME;
+  location / {
+    proxy_pass http://127.0.0.1:1337;
+  }
+}" > $NGINX_CONF_FILE
   
   info "Wrote server configuration to $(bold $NGINX_CONF_FILE)"
 fi
@@ -140,7 +140,7 @@ cd /var/www/bild && rustup run nightly cargo build --release
 new_task "Adding systemd service $(bold /etc/systemd/system/bild-server.service)"
 echo "
 [Unit]
-Description=My Rocket application for your-domain.com
+Description=My Rocket application for $DOMAIN_NAME
 
 [Service]
 User=www-data
@@ -163,6 +163,9 @@ WantedBy=multi-user.target
 new_task "Starting up bild-server.service"
 systemctl start bild-server && systemctl enable bild-server
 
+info "Generating auth token"
+AUTH_TOKEN=$(/var/www/bild/target/release/bild-auth -t)
+
 green_bold "Thats it! Below is some final information:"
 
-list "$(bold "Request URL:") https://$DOMAIN_NAME/i/upload" "$(bold "Form field:") data" "$(bold "Extra Headers:") Authorization: Bearer XXXXXXXXXXXXX" "$(bold "Image link:") {url}"
+list "$(bold "Request URL:") https://$DOMAIN_NAME/upload" "$(bold "Form field:") data" "$(bold "Extra Headers:") Authorization: Bearer $AUTH_TOKEN" "$(bold "Image link:") {url}"
