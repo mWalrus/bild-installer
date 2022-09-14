@@ -104,6 +104,7 @@ if [ -f "$NGINX_CONF_FILE" ]; then
 else
   echo "
 server {
+  listen [::]:80;
   server_name $DOMAIN_NAME www.$DOMAIN_NAME;
   location / {
     proxy_pass http://127.0.0.1:1337;
@@ -115,6 +116,9 @@ fi
 
 info "Symlinking $(bold $NGINX_CONF_FILE) to $(bold "/etc/nginx/sites-enabled/$DOMAIN_NAME.conf")"
 ln -s $NGINX_CONF_FILE /etc/nginx/sites-enabled/$DOMAIN_NAME.conf
+
+info "Reloading nginx"
+systemctl reload nginx
 
 new_task "Start certificate generation with certbot"
 if $(confirm "Do you want to generate certificates with certbot?" true); then
