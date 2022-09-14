@@ -102,8 +102,8 @@ if [ -f "$NGINX_CONF_FILE" ]; then
     sed "/server_name $DOMAIN_NAME www.$DOMAIN_NAME/a \tlocation / {\n\t\tproxy_pass http://127.0.0.1:1337;\n\t}" $NGINX_CONF_FILE
   fi
 else
-  echo "
-server {
+  echo "server {
+  listen 80;
   listen [::]:80;
   server_name $DOMAIN_NAME www.$DOMAIN_NAME;
   location / {
@@ -114,8 +114,8 @@ server {
   info "Wrote server configuration to $(bold $NGINX_CONF_FILE)"
 fi
 
-info "Symlinking $(bold $NGINX_CONF_FILE) to $(bold "/etc/nginx/sites-enabled/$DOMAIN_NAME.conf")"
-ln -s $NGINX_CONF_FILE /etc/nginx/sites-enabled/$DOMAIN_NAME.conf
+info "Symlinking $(bold $NGINX_CONF_FILE) to $(bold "/etc/nginx/sites-enabled/")"
+ln -s $NGINX_CONF_FILE /etc/nginx/sites-enabled/
 
 info "Reloading nginx"
 systemctl reload nginx
@@ -142,8 +142,7 @@ new_task "Compiling project binaries"
 cd /var/www/bild && rustup run nightly cargo build --release
 
 new_task "Adding systemd service $(bold /etc/systemd/system/bild-server.service)"
-echo "
-[Unit]
+echo "[Unit]
 Description=My Rocket application for $DOMAIN_NAME
 
 [Service]
