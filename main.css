@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@554;704&display=swap');
+
+:root {
+  --bg: #2e3440;
+  --bg-lighter: #4c566a;
+  --text: #e5e9f0;
+  --monospace: "Inconsolata", monospace;
+  --regular: "Raleway", sans-serif;
+}
+
+body {
+  height: 100vh;
+  margin: 0;
+  background-color: var(--bg);
+  overflow: hidden;
+}
+
+.wrapper {
+  width: 50%;
+  height: 100%;
+  margin: auto;
+  padding: 5em 0;
+}
+
+.wrapper > * {
+  color: var(--text);
+  font-family: var(--regular);
+  margin: 0;
+}
+
+.wrapper .header {
+  text-align: center;
+}
+
+.wrapper h1 {
+  font-weight: 704;
+  font-size: 5em;
+}
+
+.wrapper .install-text {
+  padding-top: 4em;
+  padding-bottom: 1em;
+}
+
+.code {
+  font-family: var(--monospace);
+  background-color: #1A1D23;
+  padding: 1em;
+  border-radius: .5em;
+  line-height: 120%;
+}
+
+.wrapper a {
+  color: #81A1C1;
+}
+
