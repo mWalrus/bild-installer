@@ -135,11 +135,11 @@ fi
 new_task "Cloning down bild repo to $(bold "/var/www/bild")"
 git clone https://gitlab.com/mWalrus/bild.git /var/www/bild
 
-info "Changing $(bold "/var/www/bild")'s owner to www-data"
-chown -R www-data: /var/www/bild
-
 new_task "Compiling project binaries"
 cd /var/www/bild && rustup run nightly cargo build --release
+
+info "Changing $(bold "/var/www/bild")'s owner to www-data"
+chown -R www-data: /var/www/bild
 
 new_task "Adding systemd service $(bold /etc/systemd/system/bild-server.service)"
 echo "[Unit]
@@ -163,7 +163,7 @@ ExecStart=/var/www/bild/target/release/bild-server
 WantedBy=multi-user.target
 " > /etc/systemd/system/bild-server.service
 
-info "Running systemctl daemon-reload"
+info "Reloading systemd daemon"
 systemctl daemon-reload
 
 info "Starting up bild-server.service"
