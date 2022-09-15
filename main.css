@@ -17,7 +17,8 @@ body {
 }
 
 .wrapper {
-  width: 50%;
+  width: 40%;
+  min-width: 30em;
   height: 100%;
   margin: auto;
   padding: 5em 0;
