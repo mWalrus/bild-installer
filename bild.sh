@@ -91,7 +91,8 @@ info "Adding cargo binaries to PATH"
 info "Installing rustup nightly toolchain"
 rustup install nightly
 
-DOMAIN_NAME="i.$(read_string "Enter your domain name (ex: your-domain.com)")"
+DOMAIN_NAME="$(read_string "Enter your domain name (ex: your-domain.com)")"
+DOMAIN_NAME="i.$DOMAIN_NAME"
 
 new_task "Creating nginx config file"
 NGINX_CONF_FILE="/etc/nginx/sites-available/$DOMAIN_NAME.conf"
