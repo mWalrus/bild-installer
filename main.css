@@ -50,6 +50,7 @@ body {
   padding: 1em;
   border-radius: .5em;
   line-height: 120%;
+  overflowX: scroll;
 }
 
 .wrapper a {
