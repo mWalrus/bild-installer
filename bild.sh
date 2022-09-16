@@ -36,7 +36,7 @@ list() {
 
 read_string() {
   printf "%40s" "${BLUE}${B}[Bild Install] $1:${R} "
-  read -r
+  read -r REPLY
   echo "$REPLY"
 }
 
@@ -48,7 +48,7 @@ confirm() {
   fi
   
   printf "%s" "$1 $YN"
-  read -r
+  read -r REPLY
   REPLY=$(awk '{print tolower($REPLY)}')
   if [ "$REPLY" = "n" ] || [ "$REPLY" = "no" ]; then
     false
