@@ -1,58 +1,58 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 # Colors
-RED="\e[91m"
-GREEN="\e[92m"
-YELLOW="\e[93m"
-BLUE="\e[94m"
-MAGENTA="\e[95m"
-BLACK="\e[30m"
-B="\e[1m"
-R="\e[0m"
+GREEN=$(tput setaf 10)
+YELLOW=$(tput setaf 11)
+BLUE=$(tput setaf 12)
+MAGENTA=$(tput setaf 13)
+B=$(tput bold)
+R=$(tput sgr0)
 
-function green_bold() {
-  echo -e "${GREEN}${B}[Bild Install] $1${R}"
+green_bold() {
+  printf "%s\n" "${GREEN}${B}[Bild Install] $1${R}"
 }
 
-function new_task() {
-  echo -e "${BLUE}${B}[Bild Install] ->${R} $1"
+new_task() {
+  printf "%s\n" "${BLUE}${B}[Bild Install] ->${R} $1"
 }
 
-function info() {
-  echo -e "${MAGENTA}${B}[Bild Install] ..${R} $1"
+info() {
+  printf "%s\n" "${MAGENTA}${B}[Bild Install] ..${R} $1"
 }
 
-function bold() {
-  echo -e "${B}$1${R}"
+bold() {
+  printf "%s\n" "${B}$1${R}"
 }
 
-function warn() {
-  echo -e "${YELLOW}${B}[Bild Install] !! $1${R}"
+warn() {
+  printf "%s\n" "${YELLOW}${B}[Bild Install] !! $1${R}"
 }
 
-function list() {
-  while (( "$#" )); do
-    echo -e "${MAGENTA}${B} - ${R}$1"
-    shift
+list() {
+  for arg
+  do printf "%s\n\r" "${MAGENTA}${B} - ${R}$arg"
   done
 }
 
-function read_string() {
-  echo $(read -p "$(echo -e "${BLUE}${B}[Bild Install] $1:${R} ")" RES; echo $RES)
+read_string() {
+  printf "%s" "${BLUE}${B}[Bild Install] $1:${R} "
+  read -r RES
+  echo "$RES"
 }
 
-function confirm() {
+confirm() {
   if $2; then
     YN="[Y/n]"
   else
     YN="[y/N]"
   fi
-  
-  read -p "$1 $YN " REPLY
-  REPLY=$REPLY | awk '{print tolower($0)}'
-  if [ "$REPLY" == "n" ] || [ "$REPLY" == "no" ]; then
+
+  printf "%s" "$1 $YN"
+  read -r RES
+  RES=$(awk '{print tolower($RES)}')
+  if [ "$RES" = "n" ] || [ "$RES" = "no" ]; then
     false
-  elif [ ! $2 ] && [ "$REPLY" == "" ]; then
+  elif [ ! "$2" ] && [ "$RES" = "" ]; then
     false
   else
     true
@@ -86,20 +86,21 @@ new_task "Installing rustup"
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 info "Adding cargo binaries to PATH"
-source "$HOME/.cargo/env"
+. "$HOME/.cargo/env"
 
 info "Installing rustup nightly toolchain"
 rustup install nightly
 
-DOMAIN_NAME="i.$(read_string "Enter your domain name (ex: your-domain.com)")"
+DOMAIN_NAME="$(read_string "Enter your domain name (ex: your-domain.com)")"
+DOMAIN_NAME="i.$DOMAIN_NAME"
 
 new_task "Creating nginx config file"
 NGINX_CONF_FILE="/etc/nginx/sites-available/$DOMAIN_NAME.conf"
 if [ -f "$NGINX_CONF_FILE" ]; then
   info "Looks like $NGINX_CONF_FILE already exists"
-  if [ grep -q "server_name $DOMAIN_NAME www.$DOMAIN_NAME" ]; then
+  if grep -q "server_name $DOMAIN_NAME www.$DOMAIN_NAME"; then
     info "Updating conf file with required fields"
-    sed "/server_name $DOMAIN_NAME www.$DOMAIN_NAME/a \tlocation / {\n\t\tproxy_pass http://127.0.0.1:1337;\n\t}" $NGINX_CONF_FILE
+    sed "/server_name $DOMAIN_NAME www.$DOMAIN_NAME/a \tlocation / {\n\t\tproxy_pass http://127.0.0.1:1337;\n\t}" "$NGINX_CONF_FILE"
   fi
 else
   echo "server {
@@ -109,22 +110,22 @@ else
   location / {
     proxy_pass http://127.0.0.1:1337;
   }
-}" > $NGINX_CONF_FILE
-  
-  info "Wrote server configuration to $(bold $NGINX_CONF_FILE)"
+}" > "$NGINX_CONF_FILE"
+
+  info "Wrote server configuration to $(bold "$NGINX_CONF_FILE")"
 fi
 
-info "Symlinking $(bold $NGINX_CONF_FILE) to $(bold "/etc/nginx/sites-enabled/")"
-ln -s $NGINX_CONF_FILE /etc/nginx/sites-enabled/
+info "Symlinking $(bold "$NGINX_CONF_FILE") to $(bold "/etc/nginx/sites-enabled/")"
+ln -s "$NGINX_CONF_FILE" /etc/nginx/sites-enabled/
 
 info "Reloading nginx"
 systemctl reload nginx
 
 new_task "Start certificate generation with certbot"
-if $(confirm "Do you want to generate certificates with certbot?" true); then
+if confirm "Do you want to generate certificates with certbot?" true; then
   info "Generating certs"
-  certbot --nginx -d $DOMAIN_NAME -d "www.$DOMAIN_NAME"
-  
+  certbot --nginx -d "$DOMAIN_NAME" -d "www.$DOMAIN_NAME"
+
   info "Reloading nginx"
   systemctl reload nginx
 else
