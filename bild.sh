@@ -9,35 +9,35 @@ B=$(tput bold)
 R=$(tput sgr0)
 
 green_bold() {
-  printf "%40s\n" "${GREEN}${B}[Bild Install] $1${R}"
+  printf "%s\n" "${GREEN}${B}[Bild Install] $1${R}"
 }
 
 new_task() {
-  printf "%40s\n" "${BLUE}${B}[Bild Install] ->${R} $1"
+  printf "%s\n" "${BLUE}${B}[Bild Install] ->${R} $1"
 }
 
 info() {
-  printf "%40s\n" "${MAGENTA}${B}[Bild Install] ..${R} $1"
+  printf "%s\n" "${MAGENTA}${B}[Bild Install] ..${R} $1"
 }
 
 bold() {
-  printf "%40s\n" "${B}$1${R}"
+  printf "%s\n" "${B}$1${R}"
 }
 
 warn() {
-  printf "%40s\n" "${YELLOW}${B}[Bild Install] !! $1${R}"
+  printf "%s\n" "${YELLOW}${B}[Bild Install] !! $1${R}"
 }
 
 list() {
   for arg
-  do printf "%40s\n" "${MAGENTA}${B} - ${R}$arg"
+  do printf "%s\n\r" "${MAGENTA}${B} - ${R}$arg"
   done
 }
 
 read_string() {
-  printf "%40s" "${BLUE}${B}[Bild Install] $1:${R} "
-  read -r REPLY
-  echo "$REPLY"
+  printf "%s" "${BLUE}${B}[Bild Install] $1:${R} "
+  read -r RES
+  echo "$RES"
 }
 
 confirm() {
@@ -48,11 +48,11 @@ confirm() {
   fi
   
   printf "%s" "$1 $YN"
-  read -r REPLY
-  REPLY=$(awk '{print tolower($REPLY)}')
-  if [ "$REPLY" = "n" ] || [ "$REPLY" = "no" ]; then
+  read -r RES
+  RES=$(awk '{print tolower($RES)}')
+  if [ "$RES" = "n" ] || [ "$RES" = "no" ]; then
     false
-  elif [ ! "$2" ] && [ "$REPLY" = "" ]; then
+  elif [ ! "$2" ] && [ "$RES" = "" ]; then
     false
   else
     true
