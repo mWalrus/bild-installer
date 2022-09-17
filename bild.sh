@@ -139,6 +139,15 @@ info "Changing $(bold "/var/www/bild")'s owner to www-data"
 chown -R www-data: /var/www/bild
 
 new_task "Adding systemd service $(bold /etc/systemd/system/bild-server.service)"
+
+read_string "Enter limit of uploads per second (default: 2)"
+
+if [ -z "$REPLY" ] || ! echo "$REPLY" | grep -q "^[0-9]*$"; then
+  RL="2"
+else
+  RL="$REPLY"
+fi
+
 echo "[Unit]
 Description=My Rocket application for $DOMAIN_NAME
 
@@ -153,7 +162,7 @@ Environment=\"ROCKET_PORT=1337\"
 Environment=\"ROCKET_LOG=critical\"
 Environment=\"ROCKET_SERVER_URL=https://$DOMAIN_NAME\"
 # Optional environment variable
-# Environment=\"ROCKET_RATE_LIMIT=2\" # default is 2
+Environment=\"ROCKET_RATE_LIMIT=$RL\" # default is 2
 ExecStart=/var/www/bild/target/release/bild-server
 
 [Install]
