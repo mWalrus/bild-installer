@@ -64,18 +64,6 @@ confirm() {
 
 green_bold "Welcome to the bild installer!"
 
-# Retrieve the distro name
-DISTRO=$(cat /etc/*-release | grep DISTRIB_ID | awk -F"=" '{print $2}' | sed 's/"//')
-
-# If distro is not ubuntu, warn the user of risk
-if [ "$DISTRO" != "Ubuntu" ]; then
-  warn "It looks like you're not running Ubuntu"
-  if ! confirm "Things might not work as intended, continue anyways?" false; then
-    green_bold "Exiting"
-    exit 0
-  fi
-fi
-
 case "$1" in
   --update | -u )
     new_task "Cloning down bild repo to $(bold "/var/www/bild")"
@@ -88,8 +76,26 @@ case "$1" in
     systemctl stop bild-server && systemctl start bild-server
     exit 0
   ;;
+  --help | -h )
+    echo "usage: $(basename "$0") [option...]"
+    echo
+    echo "    -u, --update       Update an existing installation of Bild"
+    echo "    -h, --help         Display this help screen"
+    echo
+    exit 0
 esac
 
+# Retrieve the distro name
+DISTRO=$(cat /etc/*-release | grep DISTRIB_ID | awk -F"=" '{print $2}' | sed 's/"//')
+
+# If distro is not ubuntu, warn the user of risk
+if [ "$DISTRO" != "Ubuntu" ]; then
+  warn "It looks like you're not running Ubuntu"
+  if ! confirm "Things might not work as intended, continue anyways?" false; then
+    green_bold "Exiting"
+    exit 0
+  fi
+fi
 
 new_task "Installing required packages:"
 list "nginx" "certbot" "python3-certbot-nginx" "gcc"
