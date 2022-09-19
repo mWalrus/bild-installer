@@ -41,8 +41,6 @@ read_string() {
 validate_number_input() {
   if [ -z "$REPLY" ] || ! echo "$REPLY" | grep -q "^[0-9]*$"; then
     REPLY="$1"
-  else
-    REPLY="$REPLY"
   fi
 }
 
@@ -157,6 +155,10 @@ read_string "Turn on periodic file deletion (ON=1, OFF=0, default: 1)"
 
 validate_number_input 1
 GARBAGE_COLLECTOR=$REPLY
+
+if [ "$GARBAGE_COLLECTOR" != "0" ] && [ "$GARBAGE_COLLECTOR" != "1" ]; then
+  GARBAGE_COLLECTOR="1"
+fi
 
 if [ "$GARBAGE_COLLECTOR" = "1" ]; then
   read_string "Enter how many weeks files are allowed to live for (default: 2)"
