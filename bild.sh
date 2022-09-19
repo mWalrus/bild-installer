@@ -38,6 +38,14 @@ read_string() {
   printf "%s" "${BLUE}${B}[Bild Install] $1:${R} "; read -r REPLY
 }
 
+validate_number_input() {
+  if [ -z "$REPLY" ] || ! echo "$REPLY" | grep -q "^[0-9]*$"; then
+    REPLY="$1"
+  else
+    REPLY="$REPLY"
+  fi
+}
+
 confirm() {
   if $2; then
     YN="[Y/n]"
@@ -142,11 +150,25 @@ new_task "Adding systemd service $(bold /etc/systemd/system/bild-server.service)
 
 read_string "Enter limit of uploads per second (default: 2)"
 
-if [ -z "$REPLY" ] || ! echo "$REPLY" | grep -q "^[0-9]*$"; then
-  RL="2"
+validate_number_input 2
+RATE_LIMIT=$REPLY
+
+read_string "Turn on periodic file deletion (ON=1, OFF=0, default: 1)"
+
+validate_number_input 1
+GARBAGE_COLLECTOR=$REPLY
+
+if [ "$GARBAGE_COLLECTOR" = "1" ]; then
+  read_string "Enter how many weeks files are allowed to live for (default: 2)"
+
+  validate_number_input 2
+  NUM_WEEKS=$REPLY
 else
-  RL="$REPLY"
+  NUM_WEEKS="2"
 fi
+
+read_string "Enter max upload size (default: 5 MiB)"
+UPLOAD_MAX_SIZE=$REPLY
 
 echo "[Unit]
 Description=My Rocket application for $DOMAIN_NAME
@@ -156,13 +178,13 @@ User=www-data
 Group=www-data
 # The user www-data should probably own that directory
 WorkingDirectory=/var/www/bild
-Environment=\"ROCKET_ENV=prod\"
 Environment=\"ROCKET_ADDRESS=127.0.0.1\"
 Environment=\"ROCKET_PORT=1337\"
-Environment=\"ROCKET_LOG=critical\"
 Environment=\"ROCKET_SERVER_URL=https://$DOMAIN_NAME\"
-# Optional environment variable
-Environment=\"ROCKET_RATE_LIMIT=$RL\" # default is 2
+Environment=\"ROCKET_GARBAGE_COLLECTOR=$GARBAGE_COLLECTOR\"
+Environment=\"ROCKET_RATE_LIMIT=$RATE_LIMIT\"
+Environment=\"ROCKET_FILE_AGE_WEEKS=$NUM_WEEKS\"
+Environment=\"ROCKET_UPLOAD_MAX_SIZE=$UPLOAD_MAX_SIZE\"
 ExecStart=/var/www/bild/target/release/bild-server
 
 [Install]
