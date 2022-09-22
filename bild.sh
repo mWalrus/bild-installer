@@ -62,10 +62,18 @@ confirm() {
   esac
 }
 
+install_packages() {
+  new_task "Installing required packages:"
+  list "nginx" "certbot" "python3-certbot-nginx" "gcc" "ffmpeg" "clang" "libavcodec-dev" "libavformat-dev" "libavutil-dev" "pkg-config"
+  apt install nginx certbot python3-certbot-nginx gcc ffmpeg clang libavcodec-dev libavformat-dev libavutil-dev pkg-config
+}
+
 green_bold "Welcome to the bild installer!"
 
 case "$1" in
   --update | -u )
+    install_packages
+
     new_task "Cloning down bild repo to $(bold "/var/www/bild")"
     git clone https://gitlab.com/mWalrus/bild.git /var/www/bild
 
@@ -97,9 +105,7 @@ if [ "$DISTRO" != "Ubuntu" ]; then
   fi
 fi
 
-new_task "Installing required packages:"
-list "nginx" "certbot" "python3-certbot-nginx" "gcc"
-apt install nginx certbot python3-certbot-nginx gcc
+install_packages
 
 new_task "Making sure nginx is up and running"
 systemctl start nginx && systemctl enable nginx
