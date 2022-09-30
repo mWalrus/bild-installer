@@ -173,12 +173,10 @@ chown -R www-data: /var/www/bild
 new_task "Adding systemd service $(bold /etc/systemd/system/bild-server.service)"
 
 read_string "Enter limit of uploads per second (default: 2)"
-
 validate_number_input 2
 RATE_LIMIT=$REPLY
 
 read_string "Turn on periodic file deletion (ON=1, OFF=0, default: 1)"
-
 validate_number_input 1
 GARBAGE_COLLECTOR=$REPLY
 
@@ -196,6 +194,7 @@ else
 fi
 
 read_string "Enter max file size (default: 20 MiB)"
+validate_number_input 20
 UPLOAD_MAX_SIZE=$REPLY
 
 echo "[Unit]
