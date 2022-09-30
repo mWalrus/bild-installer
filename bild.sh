@@ -206,7 +206,6 @@ Group=www-data
 # The user www-data should probably own that directory
 WorkingDirectory=/var/www/bild
 Environment=\"ROCKET_ADDRESS=127.0.0.1\"
-Environment=\"ROCKET_PORT=1337\"
 Environment=\"ROCKET_SERVER_URL=https://$DOMAIN_NAME\"
 Environment=\"ROCKET_GARBAGE_COLLECTOR=$GARBAGE_COLLECTOR\"
 Environment=\"ROCKET_RATE_LIMIT=$RATE_LIMIT\"
