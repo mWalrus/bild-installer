@@ -64,8 +64,8 @@ confirm() {
 
 install_packages() {
   new_task "Installing required packages:"
-  list "nginx" "certbot" "python3-certbot-nginx" "gcc" "ffmpeg" "clang" "libavcodec-dev" "libavformat-dev" "libavutil-dev" "pkg-config"
-  apt install nginx certbot python3-certbot-nginx gcc ffmpeg clang libavcodec-dev libavformat-dev libavutil-dev pkg-config
+  list "nginx" "certbot" "python3-certbot-nginx" "gcc"
+  apt install nginx certbot python3-certbot-nginx gcc
 }
 
 green_bold "Welcome to the bild installer!"
@@ -195,11 +195,8 @@ else
   NUM_WEEKS="2"
 fi
 
-read_string "Enter max upload size for images (default: 5 MiB)"
-IMG_UPLOAD_MAX_SIZE=$REPLY
-
-read_string "Enter max upload size for videos (default: 20 MiB)"
-VID_UPLOAD_MAX_SIZE=$REPLY
+read_string "Enter max file size (default: 20 MiB)"
+UPLOAD_MAX_SIZE=$REPLY
 
 echo "[Unit]
 Description=My Rocket application for $DOMAIN_NAME
@@ -215,8 +212,7 @@ Environment=\"ROCKET_SERVER_URL=https://$DOMAIN_NAME\"
 Environment=\"ROCKET_GARBAGE_COLLECTOR=$GARBAGE_COLLECTOR\"
 Environment=\"ROCKET_RATE_LIMIT=$RATE_LIMIT\"
 Environment=\"ROCKET_FILE_AGE_WEEKS=$NUM_WEEKS\"
-Environment=\"ROCKET_VIDEO_UPLOAD_MAX_SIZE=$VID_UPLOAD_MAX_SIZE\"
-Environment=\"ROCKET_IMAGE_UPLOAD_MAX_SIZE=$IMG_UPLOAD_MAX_SIZE\"
+Environment=\"ROCKET_UPLOAD_MAX_SIZE=$UPLOAD_MAX_SIZE\"
 ExecStart=/var/www/bild/target/release/bild-server
 
 [Install]
