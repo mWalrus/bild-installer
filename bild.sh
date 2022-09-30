@@ -73,9 +73,9 @@ green_bold "Welcome to the bild installer!"
 case "$1" in
   --update | -u )
     install_packages
-
+    
     new_task "Cloning down bild repo to $(bold "/var/www/bild")"
-    git clone https://gitlab.com/mWalrus/bild.git /var/www/bild
+    cd /var/www/bild && git pull
 
     new_task "Compiling project binaries"
     cd /var/www/bild && rustup run nightly cargo build --release
