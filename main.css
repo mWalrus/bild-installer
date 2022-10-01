@@ -57,3 +57,18 @@ body {
   color: #81A1C1;
 }
 
+.menu {
+  padding: .6em 0;
+}
+
+.menu button {
+  border: none;
+  background: none;
+  color: var(--text);
+}
+
+.menu button:hover, .menu button.active {
+  text-decoration: underline;
+  cursor: pointer;
+}
+

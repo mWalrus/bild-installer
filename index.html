@@ -1,30 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <title>Bild Server</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta name="description" content="Bild server landing page" />
-    <link rel="stylesheet" type="text/css" href="./main.css"/>
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
-  </head>
-  <body>
-    <div class="wrapper">
-      <div class="header">
-        <h1>Bild</h1>
-        <p class="desc">
-          A small image server built with <a href="https://rust-lang.org">rust</a>, <a href="https://rocket.rs">rocket</a>, and <a href="https://github.com/image-rs/image">image</a>.
-          The repository for this project can be found <a href="https://gitlab.com/mWalrus/bild">here</a>, where you can find more information.
-        </p>
-      </div>
-      <div class="install-text">
-        <h2>Installation</h2>
-        <p>Run this in your terminal, the installer will take care of the rest:</p>
-      </div>
-      <p id="code-block" class="code">sh -c "$(curl https://bild.waalrus.xyz/bild.sh)"</p>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Bild server landing page" />
+  <link rel="stylesheet" type="text/css" href="./main.css" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <h1>Bild</h1>
+      <p class="desc">
+        A small image server built with <a href="https://rust-lang.org">rust</a>, <a
+          href="https://rocket.rs">rocket</a>, and <a href="https://github.com/image-rs/image">image</a>.
+        The repository for this project can be found <a href="https://gitlab.com/mWalrus/bild">here</a>, where you can
+        find more information.
+      </p>
     </div>
-  </body>
+    <div class="install-text">
+      <h2>Installation</h2>
+      <p>Run this in your terminal, the installer will take care of the rest:</p>
+    </div>
+    <div class="menu">
+      <button id="install">install</button>
+      <button id="update">update</button>
+    </div>
+    <p id="code-block" class="code">sh -c "$(curl https://bild.waalrus.xyz/bild.sh)"</p>
+  </div>
+  <script>
+    let codeElement = document.getElementById('code-block')
+
+    let installBtn = document.getElementById('install')
+    installBtn.classList.add("active")
+    let updateBtn = document.getElementById('update')
+
+    installBtn.addEventListener('click', toggle, false)
+    updateBtn.addEventListener('click', toggle, false)
+
+    function toggle(e) {
+      let id = e.target.id
+      if (id === "install") {
+        codeElement.innerText = "sh -c \"$(curl https://bild.waalrus.xyz/bild.sh)\""
+        installBtn.classList.add("active")
+        updateBtn.classList.remove("active")
+      } else if (id === "update") {
+        codeElement.innerText = "sh -c \"$(curl https://bild.waalrus.xyz/bild.sh)\" -- -u"
+        installBtn.classList.remove("active")
+        updateBtn.classList.add("active")
+      }
+    }
+  </script>
+</body>
+
 </html>
