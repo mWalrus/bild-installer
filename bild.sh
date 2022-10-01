@@ -81,7 +81,8 @@ case "$1" in
     cd /var/www/bild && rustup run nightly cargo build --release
     
     new_task "Reloading bild-server service"
-    systemctl stop bild-server && systemctl start bild-server
+    systemctl stop bild-server
+    systemctl start bild-server
     exit 0
   ;;
   --help | -h )
