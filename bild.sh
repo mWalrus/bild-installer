@@ -163,7 +163,7 @@ fi
 
 
 new_task "Cloning down bild repo to $(bold "/var/www/bild")"
-git clone https://gitlab.com/mWalrus/bild.git /var/www/bild
+git clone https://github.com/mWalrus/bild.git /var/www/bild
 
 new_task "Compiling project binaries"
 cd /var/www/bild && rustup run nightly cargo build --release
