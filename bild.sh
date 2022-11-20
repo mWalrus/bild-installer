@@ -64,8 +64,8 @@ confirm() {
 
 install_packages() {
   new_task "Installing required packages:"
-  list "nginx" "certbot" "python3-certbot-nginx" "gcc"
-  apt install nginx certbot python3-certbot-nginx gcc
+  list "nginx" "certbot" "python3-certbot-nginx" "gcc" "ffmpeg"
+  apt install nginx certbot python3-certbot-nginx gcc ffmpeg
 }
 
 green_bold "Welcome to the bild installer!"
@@ -229,6 +229,6 @@ AUTH_TOKEN=$(/var/www/bild/target/release/bild-auth -t)
 
 green_bold "Thats it! Below is some final information:"
 
-list "$(bold "Request URL:") https://$DOMAIN_NAME/upload" "$(bold "Form field:") data" "$(bold "Extra Headers:") Authorization: Bearer $AUTH_TOKEN" "$(bold "Image link:") {url}"
+list "$(bold "Request URL:") https://$DOMAIN_NAME/upload" "$(bold "Form field:") data" "$(bold "Extra Headers:") Authorization: Bearer $AUTH_TOKEN" "$(bold "Image link:") {link}"
 
 info "Dont forget to forward port 80 and 443 on your VPS if needed. :)"
