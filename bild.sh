@@ -229,6 +229,6 @@ AUTH_TOKEN=$(/var/www/bild/target/release/bild-auth -t)
 
 green_bold "Thats it! Below is some final information:"
 
-list "$(bold "Request URL:") https://$DOMAIN_NAME/upload" "$(bold "Form field:") data" "$(bold "Extra Headers:") Authorization: Bearer $AUTH_TOKEN" "$(bold "Image link:") {link}"
+list "$(bold "Request URL:") https://$DOMAIN_NAME/upload" "$(bold "Form field:") data" "$(bold "Extra Headers:") Authorization: Bearer $AUTH_TOKEN" "$(bold "Image link:") {link}" "$(bold "Deletion link:") {delete_link}"
 
 info "Dont forget to forward port 80 and 443 on your VPS if needed. :)"
