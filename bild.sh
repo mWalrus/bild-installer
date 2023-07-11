@@ -64,8 +64,8 @@ confirm() {
 
 install_packages() {
   new_task "Installing required packages:"
-  list "nginx" "certbot" "python3-certbot-nginx" "gcc" "ffmpeg"
-  apt install nginx certbot python3-certbot-nginx gcc ffmpeg
+  list "nginx" "certbot" "python3-certbot-nginx" "gcc"
+  apt install nginx certbot python3-certbot-nginx gcc
 }
 
 green_bold "Welcome to the bild installer!"
