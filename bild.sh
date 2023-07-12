@@ -199,7 +199,7 @@ validate_number_input 20
 UPLOAD_MAX_SIZE=$REPLY
 
 echo "[Unit]
-Description=My Rocket application for $DOMAIN_NAME
+Description=Bild media uploader instance hosted at $DOMAIN_NAME
 
 [Service]
 User=www-data
